@@ -1,0 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
+
+.custom-font {
+  font-family: "DM Serif Display", serif;
+  font-weight: bold;
+  color: #184469;
+}
