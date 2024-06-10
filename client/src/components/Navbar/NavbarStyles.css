@@ -1,77 +1,4 @@
-/* @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
-
-.navbarRoot {
-  height: 70px;
-  width: 100%;
-  background: linear-gradient(
-    135deg,
-    #fbfbff 0%,
-    #d5e6fd 50%,
-    #fbfbff 100%,
-    #7db9e8 100%
-  );
-  display: flex;
-  align-items: center;
-  position: sticky;
-  top: 0;
-}
-
-.logoText {
-  font-size: 24px;
-  margin-left: 5px !important;
-  font-weight: bold;
-  color: #184469;
-  cursor: pointer;
-  margin-top: 17px;
-}
-
-.leftContainer {
-  flex: 3;
-  display: flex;
-  font-family: "DM Serif Display", serif;
-}
-
-.search {
-  width: 80%;
-  height: 30px;
-  background-color: white;
-  border-radius: 10px;
-  align-items: center;
-}
-
-.searchIcon {
-  font-size: 20px !important;
-  margin-left: 10px;
-  color: #184469;
-}
-
-.searchInput {
-  border: none;
-  width: 80%;
-  padding: 2px;
-  margin-left: 5px;
-}
-
-.searchInput:focus {
-  outline: none;
-}
-
-.centerContainer {
-  flex: 5;
-  font-family: "DM Serif Display", serif;
-  color: #184469;
-}
-
-.rightContainer {
-  flex: 4;
-}
-
-.navbarLinks {
-  display: flex;
-  justify-content: space-around;
-} */
-
-@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 
 .navbarRoot {
   height: 70px;
@@ -119,7 +46,9 @@
 .centerContainer {
   flex: 2;
   justify-content: center;
-  font-family: "DM Serif Display", serif;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
   color: #184469;
 }
 
