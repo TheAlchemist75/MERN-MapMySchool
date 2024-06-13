@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 70px);
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    #fbfbff 0%,
+    #d5e6fd 50%,
+    #fbfbff 100%,
+    #7db9e8 100%
+  );
+  animation: gradientAnimation 15s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.auth-box {
+  display: flex;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+}
+
+.auth-image {
+  flex: 1;
+  background: url("https://source.unsplash.com/featured/?map") center/cover
+    no-repeat;
+}
+
+.auth-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: "Playfair Display", serif;
+  color: #184469;
+}
+
+.auth-content h1 {
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.auth-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #184469;
+}
+
+.auth-content input {
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+}
+
+.auth-content button {
+  padding: 10px;
+  background: #184469;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: "Montserrat", sans-serif;
+}
+
+.auth-content button:hover {
+  background: #133353;
+}
+
+.auth-content p {
+  margin-top: 20px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.auth-content .register-button {
+  background: none;
+  color: #184469;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}

@@ -144,11 +144,13 @@
 // ------------------------------------------------------------------------------------------------------------
 
 import React, { useState, useEffect } from "react";
-
-import "./Sidebar.css";
-
 import jugendberufshilfenData from "../../api/Jugendberufshilfen.geojson";
 import kindertageseinrichtungen from "../../api/Kindertageseinrichtungen.geojson";
+import AddHomeModal from "./Addhomemodal";
+import UpdateProfileModal from "./UpdateProfileModal";
+import DeleteProfileModal from "./DeleteProfileModal";
+import "./Sidebar.css";
+import "./Modal.css";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -158,20 +160,17 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import AddHomeModal from "./Addhomemodal";
-import UpdateProfileModal from "./UpdateProfileModal";
-import DeleteProfileModal from "./DeleteProfileModal";
-
 function Sidebar() {
   const [dataDropdown, setDataDropdown] = useState(false);
   const [settingsDropdown, setSettingsDropdown] = useState(false);
   const [searchDropdown, setSearchDropdown] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [user, setUser] = useState(null);
-
-  const [addHomeModalOpen, setAddHomeModalOpen] = useState(false);
-  const [updateProfileModalOpen, setUpdateProfileModalOpen] = useState(false);
-  const [deleteProfileModalOpen, setDeleteProfileModalOpen] = useState(false);
+  const [isAddHomeModalOpen, setIsAddHomeModalOpen] = useState(false);
+  const [isUpdateProfileModalOpen, setIsUpdateProfileModalOpen] =
+    useState(false);
+  const [isDeleteProfileModalOpen, setIsDeleteProfileModalOpen] =
+    useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -181,19 +180,10 @@ function Sidebar() {
   }, []);
 
   const handleDataClick = (dataType) => {
-    console.log(`Data type clicked: ${dataType}`);
     if (dataType === "jugendberufshilfen") {
       setSelectedData(jugendberufshilfenData.features);
-      console.log(
-        "Jugendberufshilfen data set:",
-        jugendberufshilfenData.features
-      );
     } else if (dataType === "kindertageseinrichtungen") {
       setSelectedData(kindertageseinrichtungen.features);
-      console.log(
-        "Kindertageseinrichtungen data set:",
-        kindertageseinrichtungen.features
-      );
     }
   };
 
@@ -211,7 +201,6 @@ function Sidebar() {
         <ul className="menu-list">
           <li>
             <a
-              rel="noopener noreferrer"
               href="#"
               className="menu-item"
               onClick={() => setSearchDropdown(!searchDropdown)}
@@ -230,7 +219,6 @@ function Sidebar() {
           </li>
           <li>
             <a
-              rel="noopener noreferrer"
               href="#"
               className="menu-item"
               onClick={() => setDataDropdown(!dataDropdown)}
@@ -246,7 +234,6 @@ function Sidebar() {
               <ul className="submenu-list">
                 <li>
                   <a
-                    rel="noopener noreferrer"
                     href="#"
                     className="submenu-item"
                     onClick={() => handleDataClick("jugendberufshilfen")}
@@ -256,7 +243,6 @@ function Sidebar() {
                 </li>
                 <li>
                   <a
-                    rel="noopener noreferrer"
                     href="#"
                     className="submenu-item"
                     onClick={() => handleDataClick("kindertageseinrichtungen")}
@@ -264,17 +250,34 @@ function Sidebar() {
                     Kindertageseinrichtungen
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="#"
+                    className="submenu-item"
+                    onClick={() => handleDataClick("")}
+                  >
+                    Schulsozialarbeit
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="submenu-item"
+                    onClick={() => handleDataClick("")}
+                  >
+                    Schule
+                  </a>
+                </li>
               </ul>
             )}
           </li>
           <li>
-            <a rel="noopener noreferrer" href="#" className="menu-item">
+            <a href="#" className="menu-item">
               <BookmarkIcon className="menu-icon" /> Saved
             </a>
           </li>
           <li>
             <a
-              rel="noopener noreferrer"
               href="#"
               className="menu-item"
               onClick={() => setSettingsDropdown(!settingsDropdown)}
@@ -290,30 +293,27 @@ function Sidebar() {
               <ul className="submenu-list">
                 <li>
                   <a
-                    rel="noopener noreferrer"
                     href="#"
                     className="submenu-item"
-                    onClick={() => setAddHomeModalOpen(true)}
+                    onClick={() => setIsAddHomeModalOpen(true)}
                   >
                     Add Home
                   </a>
                 </li>
                 <li>
                   <a
-                    rel="noopener noreferrer"
                     href="#"
                     className="submenu-item"
-                    onClick={() => setUpdateProfileModalOpen(true)}
+                    onClick={() => setIsUpdateProfileModalOpen(true)}
                   >
                     Update Profile
                   </a>
                 </li>
                 <li>
                   <a
-                    rel="noopener noreferrer"
                     href="#"
                     className="submenu-item"
-                    onClick={() => setDeleteProfileModalOpen(true)}
+                    onClick={() => setIsDeleteProfileModalOpen(true)}
                   >
                     Delete Profile
                   </a>
@@ -322,7 +322,7 @@ function Sidebar() {
             )}
           </li>
           <li>
-            <a rel="noopener noreferrer" href="#" className="menu-item">
+            <a href="#" className="menu-item">
               <LogoutIcon className="menu-icon" /> Logout
             </a>
           </li>
@@ -344,17 +344,16 @@ function Sidebar() {
         </div>
       )}
       <AddHomeModal
-        open={addHomeModalOpen}
-        handleClose={() => setAddHomeModalOpen(false)}
+        isOpen={isAddHomeModalOpen}
+        onClose={() => setIsAddHomeModalOpen(false)}
       />
       <UpdateProfileModal
-        open={updateProfileModalOpen}
-        handleClose={() => setUpdateProfileModalOpen(false)}
-        user={user}
+        isOpen={isUpdateProfileModalOpen}
+        onClose={() => setIsUpdateProfileModalOpen(false)}
       />
       <DeleteProfileModal
-        open={deleteProfileModalOpen}
-        handleClose={() => setDeleteProfileModalOpen(false)}
+        isOpen={isDeleteProfileModalOpen}
+        onClose={() => setIsDeleteProfileModalOpen(false)}
       />
     </div>
   );

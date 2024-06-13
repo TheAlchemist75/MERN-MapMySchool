@@ -1,36 +1,37 @@
 import React from "react";
-import { Modal, Box, Button, Typography } from "@mui/material";
+import "./Modal.css";
 
-const DeleteProfileModal = ({ open, handleClose }) => {
+const DeleteProfileModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
   const handleDeleteProfile = () => {
-    console.log("Profile Deleted");
-    handleClose();
+    // Logic for deleting profile
+    onClose();
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box sx={modalStyle}>
-        <Typography variant="h6">Delete Profile</Typography>
-        <Typography variant="body1" mb={2}>
-          Are you sure you want to delete your profile?
-        </Typography>
-        <Button variant="contained" color="error" onClick={handleDeleteProfile}>
-          Delete Profile
-        </Button>
-      </Box>
-    </Modal>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Delete Profile</h2>
+          <button className="close-button" onClick={onClose}>
+            ×
+          </button>
+        </div>
+        <div className="modal-body">
+          <p>Are you sure you want to delete your profile?</p>
+        </div>
+        <div className="modal-footer">
+          <button className="cancel-button" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="confirm-button" onClick={handleDeleteProfile}>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
   );
-};
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
 };
 
 export default DeleteProfileModal;

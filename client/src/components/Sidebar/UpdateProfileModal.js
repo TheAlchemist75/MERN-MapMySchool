@@ -1,46 +1,38 @@
-import React, { useState } from "react";
-import { Modal, Box, Button, TextField, Typography } from "@mui/material";
+import React from "react";
+import "./Modal.css";
 
-const UpdateProfileModal = ({ open, handleClose, user }) => {
-  const [username, setUsername] = useState(user ? user.username : "");
+const UpdateProfileModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
 
   const handleUpdateProfile = () => {
-    console.log("Profile Updated:", username);
-    handleClose();
+    // Logic for updating profile
+    onClose();
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box sx={modalStyle}>
-        <Typography variant="h6">Update Profile</Typography>
-        <TextField
-          fullWidth
-          label="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          margin="normal"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleUpdateProfile}
-        >
-          Update Profile
-        </Button>
-      </Box>
-    </Modal>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Update Profile</h2>
+          <button className="close-button" onClick={onClose}>
+            ×
+          </button>
+        </div>
+        <div className="modal-body">
+          <input type="text" placeholder="Username" className="modal-input" />
+          <input type="email" placeholder="Email" className="modal-input" />
+        </div>
+        <div className="modal-footer">
+          <button className="cancel-button" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="confirm-button" onClick={handleUpdateProfile}>
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
   );
-};
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
 };
 
 export default UpdateProfileModal;
