@@ -194,7 +194,6 @@ const apiUrls = {
   schulen: `${config.backendUrl}/api/data/schulen`,
 };
 
-// Function to transform the data into GeoJSON format
 const transformToGeoJSON = (data) => {
   return {
     type: "FeatureCollection",
