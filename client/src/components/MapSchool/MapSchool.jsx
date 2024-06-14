@@ -3,27 +3,45 @@
 // import MapGL, { Source, Layer } from "react-map-gl";
 // import Directions from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 // import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
-// import jugendberufshilfenData from "../../api/Jugendberufshilfen.geojson";
-// import kindertageseinrichtungen from "../../api/Kindertageseinrichtungen.geojson";
+// import axios from "axios";
 // import "./MapSchool.css";
 
 // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
+// const apiUrls = {
+//   jugendberufshilfen:
+//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Jugendberufshilfen_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
+//   kindertageseinrichtungen:
+//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Kindertageseinrichtungen_Sicht/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
+//   schulsozialarbeit:
+//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulsozialarbeit_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
+//   schulen:
+//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulen_OpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
+// };
 
 // function MapSchool({ token }) {
 //   const mapRef = useRef(null);
 //   const [selectedData, setSelectedData] = useState("jugendberufshilfen");
 //   const [mapLoaded, setMapLoaded] = useState(false);
+//   const [data, setData] = useState(null);
+
+//   const fetchData = async (type) => {
+//     try {
+//       const response = await axios.get(apiUrls[type]);
+//       setData(response.data);
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//     }
+//   };
 
 //   useEffect(() => {
-//     console.log("Initializing map...");
-//   }, []);
+//     fetchData(selectedData);
+//   }, [selectedData]);
 
 //   const handleMapLoad = () => {
-//     console.log("Map loaded successfully");
 //     setMapLoaded(true);
 //     const map = mapRef.current.getMap();
 
-//     // Ensure the style is fully loaded before adding sources and layers
 //     if (!map.isStyleLoaded()) {
 //       map.on("style.load", () => {
 //         addMapLayers(map);
@@ -32,7 +50,6 @@
 //       addMapLayers(map);
 //     }
 
-//     // Add the directions control to the map
 //     const directions = new Directions({
 //       accessToken: mapboxgl.accessToken,
 //       unit: "metric",
@@ -43,22 +60,15 @@
 //   };
 
 //   const addMapLayers = (map) => {
-//     // Event listener for jugendberufshilfen
-//     map.on("click", "jugendberufshilfen-layer", (e) => {
+//     map.on("click", "data-layer", (e) => {
 //       const coordinates = e.features[0].geometry.coordinates.slice();
-//       const { TRAEGER, LEISTUNGEN, STRASSE, PLZ, ORT, TELEFON } =
-//         e.features[0].properties;
-
-//       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-//         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-//       }
-
+//       const properties = e.features[0].properties;
 //       const popupContent = `
 //         <div>
-//           <strong>${TRAEGER}</strong><br/>
-//           Leistungen: ${LEISTUNGEN}<br/>
-//           Adresse: ${STRASSE}, ${PLZ} ${ORT}<br/>
-//           Telefon: ${TELEFON}
+//           <strong>${properties.NAME || properties.TRAEGER}</strong><br/>
+//           ${properties.LEISTUNGEN ? `Leistungen: ${properties.LEISTUNGEN}<br/>` : ""}
+//           Adresse: ${properties.STRASSE}, ${properties.PLZ} ${properties.ORT}<br/>
+//           Telefon: ${properties.TELEFON}
 //         </div>
 //       `;
 
@@ -68,42 +78,11 @@
 //         .addTo(map);
 //     });
 
-//     map.on("mouseenter", "jugendberufshilfen-layer", () => {
+//     map.on("mouseenter", "data-layer", () => {
 //       map.getCanvas().style.cursor = "pointer";
 //     });
 
-//     map.on("mouseleave", "jugendberufshilfen-layer", () => {
-//       map.getCanvas().style.cursor = "";
-//     });
-
-//     // Event listener for kindertageseinrichtungen
-//     map.on("click", "kindertageseinrichtungen-layer", (e) => {
-//       const coordinates = e.features[0].geometry.coordinates.slice();
-//       const { NAME, STRASSE, PLZ, ORT, TELEFON } = e.features[0].properties;
-
-//       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-//         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-//       }
-
-//       const popupContent = `
-//         <div>
-//           <strong>${NAME}</strong><br/>
-//           Adresse: ${STRASSE}, ${PLZ} ${ORT}<br/>
-//           Telefon: ${TELEFON}
-//         </div>
-//       `;
-
-//       new mapboxgl.Popup({ offset: 25 })
-//         .setLngLat(coordinates)
-//         .setHTML(popupContent)
-//         .addTo(map);
-//     });
-
-//     map.on("mouseenter", "kindertageseinrichtungen-layer", () => {
-//       map.getCanvas().style.cursor = "pointer";
-//     });
-
-//     map.on("mouseleave", "kindertageseinrichtungen-layer", () => {
+//     map.on("mouseleave", "data-layer", () => {
 //       map.getCanvas().style.cursor = "";
 //     });
 //   };
@@ -131,6 +110,8 @@
 //           <option value="kindertageseinrichtungen">
 //             Kindertageseinrichtungen
 //           </option>
+//           <option value="schulsozialarbeit">Schulsozialarbeit</option>
+//           <option value="schulen">Schulen</option>
 //         </select>
 //       </div>
 
@@ -149,46 +130,18 @@
 //         mapStyle="mapbox://styles/alchemist75/clwhv8vyk00pe01r00pxh11qo"
 //         onLoad={handleMapLoad}
 //       >
-//         {mapLoaded && (
-//           <>
-//             <Source
-//               id="jugendberufshilfen"
-//               type="geojson"
-//               data={jugendberufshilfenData}
-//             >
-//               <Layer
-//                 id="jugendberufshilfen-layer"
-//                 type="symbol"
-//                 layout={{
-//                   "icon-image": "mapbox-circle",
-//                   "icon-size": 1,
-//                   visibility:
-//                     selectedData === "jugendberufshilfen" ? "visible" : "none",
-//                 }}
-//                 interactive={true}
-//               />
-//             </Source>
-
-//             <Source
-//               id="kindertageseinrichtungen"
-//               type="geojson"
-//               data={kindertageseinrichtungen}
-//             >
-//               <Layer
-//                 id="kindertageseinrichtungen-layer"
-//                 type="symbol"
-//                 layout={{
-//                   "icon-image": "mapbox-square",
-//                   "icon-size": 1,
-//                   visibility:
-//                     selectedData === "kindertageseinrichtungen"
-//                       ? "visible"
-//                       : "none",
-//                 }}
-//                 interactive={true}
-//               />
-//             </Source>
-//           </>
+//         {mapLoaded && data && (
+//           <Source id="data-source" type="geojson" data={data}>
+//             <Layer
+//               id="data-layer"
+//               type="symbol"
+//               layout={{
+//                 "icon-image": "mapbox-circle",
+//                 "icon-size": 1,
+//               }}
+//               interactive={true}
+//             />
+//           </Source>
 //         )}
 
 //         <div className="custom-attribution">
@@ -221,32 +174,56 @@
 
 // export default MapSchool;
 
-// --------------------------------------
+// -------------------------------------------------------
 
-// client/src/components/MapSchool/MapSchool.js
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import MapGL, { Source, Layer } from "react-map-gl";
 import Directions from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
-import { fetchData } from "../../api/dataService";
+import axios from "axios";
+import config from "../../config";
 import "./MapSchool.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-function MapSchool() {
+const apiUrls = {
+  jugendberufshilfen: `${config.backendUrl}/api/data/jugendberufshilfen`,
+  kindertageseinrichtungen: `${config.backendUrl}/api/data/kindertageseinrichtungen`,
+  schulsozialarbeit: `${config.backendUrl}/api/data/schulsozialarbeit`,
+  schulen: `${config.backendUrl}/api/data/schulen`,
+};
+
+// Function to transform the data into GeoJSON format
+const transformToGeoJSON = (data) => {
+  return {
+    type: "FeatureCollection",
+    features: data.features.map((feature) => ({
+      type: "Feature",
+      geometry: feature.geometry,
+      properties: feature.properties,
+    })),
+  };
+};
+
+function MapSchool({ token }) {
   const mapRef = useRef(null);
   const [selectedData, setSelectedData] = useState("jugendberufshilfen");
   const [mapLoaded, setMapLoaded] = useState(false);
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    const getData = async () => {
-      const result = await fetchData(selectedData);
-      if (result) setData(result.features);
-    };
+  const fetchData = async (type) => {
+    try {
+      const response = await axios.get(apiUrls[type]);
+      const geoJsonData = transformToGeoJSON(response.data);
+      setData(geoJsonData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-    getData();
+  useEffect(() => {
+    fetchData(selectedData);
   }, [selectedData]);
 
   const handleMapLoad = () => {
@@ -271,21 +248,15 @@ function MapSchool() {
   };
 
   const addMapLayers = (map) => {
-    map.on("click", "jugendberufshilfen-layer", (e) => {
+    map.on("click", "data-layer", (e) => {
       const coordinates = e.features[0].geometry.coordinates.slice();
-      const { TRAEGER, LEISTUNGEN, STRASSE, PLZ, ORT, TELEFON } =
-        e.features[0].properties;
-
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-
+      const properties = e.features[0].properties;
       const popupContent = `
         <div>
-          <strong>${TRAEGER}</strong><br/>
-          Leistungen: ${LEISTUNGEN}<br/>
-          Adresse: ${STRASSE}, ${PLZ} ${ORT}<br/>
-          Telefon: ${TELEFON}
+          <strong>${properties.NAME || properties.TRAEGER}</strong><br/>
+          ${properties.LEISTUNGEN ? `Leistungen: ${properties.LEISTUNGEN}<br/>` : ""}
+          Adresse: ${properties.STRASSE}, ${properties.PLZ} ${properties.ORT}<br/>
+          Telefon: ${properties.TELEFON}
         </div>
       `;
 
@@ -295,7 +266,13 @@ function MapSchool() {
         .addTo(map);
     });
 
-    // Additional event listeners for other layers...
+    map.on("mouseenter", "data-layer", () => {
+      map.getCanvas().style.cursor = "pointer";
+    });
+
+    map.on("mouseleave", "data-layer", () => {
+      map.getCanvas().style.cursor = "";
+    });
   };
 
   const handleDataChange = (event) => {
@@ -342,27 +319,19 @@ function MapSchool() {
         onLoad={handleMapLoad}
       >
         {mapLoaded && data && (
-          <>
-            <Source
-              id="jugendberufshilfen"
-              type="geojson"
-              data={{ type: "FeatureCollection", features: data }}
-            >
-              <Layer
-                id="jugendberufshilfen-layer"
-                type="symbol"
-                layout={{
-                  "icon-image": "mapbox-circle",
-                  "icon-size": 1,
-                  visibility:
-                    selectedData === "jugendberufshilfen" ? "visible" : "none",
-                }}
-                interactive
-              />
-            </Source>
-            {/* Additional layers for other data types... */}
-          </>
+          <Source id="data-source" type="geojson" data={data}>
+            <Layer
+              id="data-layer"
+              type="symbol"
+              layout={{
+                "icon-image": "mapbox-circle",
+                "icon-size": 1,
+              }}
+              interactive={true}
+            />
+          </Source>
         )}
+
         <div className="custom-attribution">
           <a
             href="https://www.mapbox.com/about/maps"

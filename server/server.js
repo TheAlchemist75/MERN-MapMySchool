@@ -27,10 +27,12 @@
 // });
 
 const express = require("express");
-const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const connectDB = require("./config/db");
+const bodyParser = require("body-parser");
 require("dotenv").config();
+
+const connectDB = require("./config/db");
 
 const app = express();
 
