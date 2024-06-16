@@ -1,0 +1,186 @@
+/* Scoped Modal Styles */
+.add-home-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.add-home-modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.add-home-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-home-modal-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.add-home-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.add-home-close-button:hover {
+  color: #ff0000;
+}
+
+.add-home-modal-body {
+  flex: 1;
+}
+
+.add-home-modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.add-home-mapbox-input-container {
+  position: relative;
+}
+
+.add-home-mapboxgl-ctrl-geocoder {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.add-home-mapboxgl-ctrl-geocoder--input {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.add-home-mapboxgl-ctrl-geocoder--suggestions {
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+
+.add-home-mapboxgl-ctrl-geocoder--suggestions .suggestions-wrapper {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.add-home-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.add-home-cancel-button,
+.add-home-confirm-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.add-home-cancel-button {
+  background: #ddd;
+  color: #333;
+}
+
+.add-home-cancel-button:hover {
+  background: #ccc;
+}
+
+.add-home-confirm-button {
+  background: #007bff;
+  color: #fff;
+}
+
+.add-home-confirm-button:hover {
+  background: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .add-home-modal-content {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .add-home-modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .add-home-modal-input {
+    font-size: 0.875rem;
+  }
+
+  .add-home-cancel-button,
+  .add-home-confirm-button {
+    font-size: 0.875rem;
+  }
+}
+
+/* Specific styling for the Mapbox Geocoder input */
+.add-home-mapboxgl-ctrl-geocoder {
+  position: relative;
+  width: 100%;
+}
+
+.add-home-mapboxgl-ctrl-geocoder--input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.add-home-mapboxgl-ctrl-geocoder--input:focus {
+  border-color: #007bff;
+}
+
+.add-home-mapboxgl-ctrl-geocoder--suggestions {
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1001; /* Ensure suggestions are above other content */
+}
+
+.add-home-mapboxgl-ctrl-geocoder--suggestions .suggestions-wrapper {
+  max-height: 200px;
+  overflow-y: auto;
+}

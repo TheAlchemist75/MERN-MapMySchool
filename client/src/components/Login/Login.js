@@ -17,12 +17,27 @@ const Login = ({ onLogin }) => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   const user = { email, password };
+
+  //   try {
+  //     const res = await axios.post(`${API_URL}/api/auth/login`, user);
+  //     const token = res.data.token;
+  //     localStorage.setItem("token", token);
+  //     onLogin(token);
+  //     navigate("/map-school");
+  //   } catch (err) {
+  //     console.error(err.response.data);
+  //   }
+  // };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { email, password };
 
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, user);
+      const res = await axios.post(`${API_URL}/api/auth/login`, user); // API_URL should be defined appropriately
       const token = res.data.token;
       localStorage.setItem("token", token);
       onLogin(token);

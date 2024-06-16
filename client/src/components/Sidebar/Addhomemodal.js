@@ -1,32 +1,101 @@
-import React from "react";
-import "./Modal.css";
+import React, { useEffect, useRef, useState } from "react";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import "./AddHomeModal.css";
+import axios from "axios";
+import mapboxgl from "mapbox-gl";
 
 const AddHomeModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const addressInputRef = useRef(null);
+  const [geocoderResult, setGeocoderResult] = useState(null);
+  const mapboxToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-  const handleAddHome = () => {
-    // Logic for adding home
-    onClose();
+  useEffect(() => {
+    if (isOpen && addressInputRef.current) {
+      const geocoder = new MapboxGeocoder({
+        accessToken: mapboxToken,
+        types: "address",
+        placeholder: "Search for an address",
+        mapboxgl: mapboxgl,
+      });
+
+      geocoder.addTo(addressInputRef.current);
+
+      geocoder.on("result", (e) => setGeocoderResult(e.result));
+      geocoder.on("clear", () => setGeocoderResult(null));
+
+      return () => {
+        geocoder.off("result", (e) => setGeocoderResult(e.result));
+        geocoder.off("clear", () => setGeocoderResult(null));
+      };
+    }
+  }, [isOpen]);
+
+  const handleAddHome = async () => {
+    const homeName = document.querySelector(".add-home-modal-input").value;
+
+    if (!geocoderResult) {
+      console.error("Address not selected");
+      return;
+    }
+
+    const homeData = {
+      name: homeName,
+      address: geocoderResult.place_name,
+      coordinates: geocoderResult.geometry.coordinates,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/homes",
+        homeData
+      );
+      console.log("Home added:", response.data);
+      onClose();
+    } catch (error) {
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("Error request:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
+    }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
+    <div className="add-home-modal-overlay" onClick={onClose}>
+      <div
+        className="add-home-modal-content"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="add-home-modal-header">
           <h2>Add Home</h2>
-          <button className="close-button" onClick={onClose}>
-            ×
+          <button className="add-home-close-button" onClick={onClose}>
+            &times;
           </button>
         </div>
-        <div className="modal-body">
-          <input type="text" placeholder="Home Name" className="modal-input" />
-          <input type="text" placeholder="Address" className="modal-input" />
+        <div className="add-home-modal-body">
+          <input
+            type="text"
+            placeholder="Home Name"
+            className="add-home-modal-input"
+          />
+          <div
+            className="add-home-mapboxgl-ctrl-geocoder"
+            ref={addressInputRef}
+          />
         </div>
-        <div className="modal-footer">
-          <button className="cancel-button" onClick={onClose}>
+        <div className="add-home-modal-footer">
+          <button className="add-home-cancel-button" onClick={onClose}>
             Cancel
           </button>
-          <button className="confirm-button" onClick={handleAddHome}>
+          <button className="add-home-confirm-button" onClick={handleAddHome}>
             Add
           </button>
         </div>

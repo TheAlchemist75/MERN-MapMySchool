@@ -33,6 +33,9 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/auth");
+const dataRoutes = require("./routes/dataRoutes");
+const homesRoute = require("./routes/homes");
 
 const app = express();
 
@@ -47,10 +50,9 @@ connectDB();
 app.use(express.json());
 
 // Routes
-const authRoutes = require("./routes/auth");
-const dataRoutes = require("./routes/dataRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/data", dataRoutes);
+app.use("/api/homes", homesRoute);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

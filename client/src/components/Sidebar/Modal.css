@@ -166,6 +166,17 @@
   margin-top: 20px;
 }
 
+.modal-body input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
 .data-card {
   margin-bottom: 15px;
   padding: 20px;
@@ -210,4 +221,37 @@
 
 .modal-content::-webkit-scrollbar-track {
   background-color: #f1f1f1;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-footer .cancel-button {
+  background: #f44336;
+  color: white;
+}
+
+.modal-footer .confirm-button {
+  background: #4caf50;
+  color: white;
+}
+
+.modal-footer .cancel-button:hover {
+  background: #d32f2f;
+}
+
+.modal-footer .confirm-button:hover {
+  background: #388e3c;
 }

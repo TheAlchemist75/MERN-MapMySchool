@@ -4,19 +4,27 @@
 // import Directions from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 // import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 // import axios from "axios";
+// import config from "../../config";
 // import "./MapSchool.css";
 
 // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 // const apiUrls = {
-//   jugendberufshilfen:
-//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Jugendberufshilfen_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
-//   kindertageseinrichtungen:
-//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Kindertageseinrichtungen_Sicht/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
-//   schulsozialarbeit:
-//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulsozialarbeit_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
-//   schulen:
-//     "https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulen_OpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
+//   jugendberufshilfen: `${config.backendUrl}/api/data/jugendberufshilfen`,
+//   kindertageseinrichtungen: `${config.backendUrl}/api/data/kindertageseinrichtungen`,
+//   schulsozialarbeit: `${config.backendUrl}/api/data/schulsozialarbeit`,
+//   schulen: `${config.backendUrl}/api/data/schulen`,
+// };
+
+// const transformToGeoJSON = (data) => {
+//   return {
+//     type: "FeatureCollection",
+//     features: data.features.map((feature) => ({
+//       type: "Feature",
+//       geometry: feature.geometry,
+//       properties: feature.properties,
+//     })),
+//   };
 // };
 
 // function MapSchool({ token }) {
@@ -28,7 +36,8 @@
 //   const fetchData = async (type) => {
 //     try {
 //       const response = await axios.get(apiUrls[type]);
-//       setData(response.data);
+//       const geoJsonData = transformToGeoJSON(response.data);
+//       setData(geoJsonData);
 //     } catch (error) {
 //       console.error("Error fetching data:", error);
 //     }
@@ -173,8 +182,7 @@
 // }
 
 // export default MapSchool;
-
-// -------------------------------------------------------
+// --------------------------------------------------
 
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
@@ -192,6 +200,7 @@ const apiUrls = {
   kindertageseinrichtungen: `${config.backendUrl}/api/data/kindertageseinrichtungen`,
   schulsozialarbeit: `${config.backendUrl}/api/data/schulsozialarbeit`,
   schulen: `${config.backendUrl}/api/data/schulen`,
+  homes: `${config.backendUrl}/api/homes`, // Add your homes API endpoint
 };
 
 const transformToGeoJSON = (data) => {
@@ -205,11 +214,29 @@ const transformToGeoJSON = (data) => {
   };
 };
 
+const transformHomesToGeoJSON = (homes) => {
+  return {
+    type: "FeatureCollection",
+    features: homes.map((home) => ({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: home.coordinates,
+      },
+      properties: {
+        name: home.name,
+        address: home.address,
+      },
+    })),
+  };
+};
+
 function MapSchool({ token }) {
   const mapRef = useRef(null);
   const [selectedData, setSelectedData] = useState("jugendberufshilfen");
   const [mapLoaded, setMapLoaded] = useState(false);
   const [data, setData] = useState(null);
+  const [homesData, setHomesData] = useState(null);
 
   const fetchData = async (type) => {
     try {
@@ -221,8 +248,19 @@ function MapSchool({ token }) {
     }
   };
 
+  const fetchHomesData = async () => {
+    try {
+      const response = await axios.get(apiUrls.homes);
+      const geoJsonData = transformHomesToGeoJSON(response.data);
+      setHomesData(geoJsonData);
+    } catch (error) {
+      console.error("Error fetching homes data:", error);
+    }
+  };
+
   useEffect(() => {
     fetchData(selectedData);
+    fetchHomesData(); // Fetch homes data on component mount
   }, [selectedData]);
 
   const handleMapLoad = () => {
@@ -272,6 +310,50 @@ function MapSchool({ token }) {
     map.on("mouseleave", "data-layer", () => {
       map.getCanvas().style.cursor = "";
     });
+
+    if (homesData) {
+      map.addSource("homes", {
+        type: "geojson",
+        data: homesData,
+      });
+
+      map.addLayer({
+        id: "homes-layer",
+        type: "symbol",
+        source: "homes",
+        layout: {
+          "icon-image": "mapbox-home",
+          "icon-size": 1,
+          "text-field": ["get", "name"],
+          "text-offset": [0, 1.25],
+          "text-anchor": "top",
+        },
+      });
+
+      map.on("click", "homes-layer", (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const properties = e.features[0].properties;
+        const popupContent = `
+          <div>
+            <strong>${properties.name}</strong><br/>
+            Adresse: ${properties.address}<br/>
+          </div>
+        `;
+
+        new mapboxgl.Popup({ offset: 25 })
+          .setLngLat(coordinates)
+          .setHTML(popupContent)
+          .addTo(map);
+      });
+
+      map.on("mouseenter", "homes-layer", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+
+      map.on("mouseleave", "homes-layer", () => {
+        map.getCanvas().style.cursor = "";
+      });
+    }
   };
 
   const handleDataChange = (event) => {
@@ -325,6 +407,22 @@ function MapSchool({ token }) {
               layout={{
                 "icon-image": "mapbox-circle",
                 "icon-size": 1,
+              }}
+              interactive={true}
+            />
+          </Source>
+        )}
+        {mapLoaded && homesData && (
+          <Source id="homes-source" type="geojson" data={homesData}>
+            <Layer
+              id="homes-layer"
+              type="symbol"
+              layout={{
+                "icon-image": "mapbox-home",
+                "icon-size": 1,
+                "text-field": ["get", "name"],
+                "text-offset": [0, 1.25],
+                "text-anchor": "top",
               }}
               interactive={true}
             />
