@@ -234,7 +234,6 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import StarIcon from "@mui/icons-material/Star";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -271,6 +270,7 @@ function Sidebar() {
   useEffect(() => {
     const fetchBookmarkedItem = async () => {
       try {
+        console.log(`${config.backendUrl}/api/bookmark`);
         const response = await fetch(`${config.backendUrl}/api/bookmark`, {
           headers: {
             "Content-Type": "application/json",
@@ -473,6 +473,7 @@ function Sidebar() {
         isOpen={isDataModalOpen}
         onClose={() => setIsDataModalOpen(false)}
         data={selectedData}
+        onBookmark={handleBookmark}
       />
       <BookmarkModal
         isOpen={isBookmarkModalOpen}

@@ -54,6 +54,27 @@ app.use("/api/auth", authRoutes);
 app.use("/api/data", dataRoutes);
 app.use("/api/homes", homesRoute);
 
+// Bookmarks
+let bookmarkedItem = null;
+app.get("/api/bookmark", (req, res) => {
+  if (bookmarkedItem) {
+    res.status(200).json({ item: bookmarkedItem });
+  } else {
+    res.status(404).json({ message: "No bookmarked item found" });
+  }
+});
+
+// POST Endpoint to save bookmarked item
+app.post("/api/bookmark", (req, res) => {
+  const { item } = req.body;
+  if (item) {
+    bookmarkedItem = item; // Store the bookmarked item in memory (replace with database logic in production)
+    res.status(200).json({ message: "Bookmark saved successfully" });
+  } else {
+    res.status(400).json({ message: "Invalid data" });
+  }
+});
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

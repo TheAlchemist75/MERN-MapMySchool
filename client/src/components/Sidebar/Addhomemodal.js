@@ -45,10 +45,17 @@ const AddHomeModal = ({ isOpen, onClose }) => {
       coordinates: geocoderResult.geometry.coordinates,
     };
 
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
+      },
+    };
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/homes",
-        homeData
+        homeData,
+        config
       );
       console.log("Home added:", response.data);
       onClose();

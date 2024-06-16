@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Home = require("../models/Home");
+const Home = require("../models/Home"); // Import the Home model
+const auth = require("../middleware/auth"); // Import authentication middleware
 
 // POST /api/homes
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { name, address, coordinates } = req.body;
 
   if (!name || !address || !coordinates) {
@@ -12,6 +13,7 @@ router.post("/", async (req, res) => {
 
   try {
     const newHome = new Home({
+      user: req.user.id, // Assign the user ID from auth middleware
       name,
       address,
       coordinates,
@@ -20,17 +22,8 @@ router.post("/", async (req, res) => {
     await newHome.save();
     res.status(201).send(newHome);
   } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// GET /api/homes
-router.get("/", async (req, res) => {
-  try {
-    const homes = await Home.find();
-    res.status(200).send(homes);
-  } catch (error) {
-    res.status(500).send(error);
+    console.error(error.message);
+    res.status(500).send("Server Error");
   }
 });
 

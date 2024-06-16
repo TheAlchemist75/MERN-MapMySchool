@@ -65,6 +65,12 @@ const DataModal = ({ isOpen, onClose, data, onBookmark }) => {
 
   const handleBookmarkClick = async (item) => {
     try {
+      console.log(
+        "Sending bookmark request to:",
+        `${config.backendUrl}/api/bookmark`
+      );
+      console.log("Request payload:", JSON.stringify({ item }));
+
       const response = await fetch(`${config.backendUrl}/api/bookmark`, {
         method: "POST",
         headers: {
@@ -77,6 +83,8 @@ const DataModal = ({ isOpen, onClose, data, onBookmark }) => {
         throw new Error("Failed to save the bookmark");
       }
 
+      const result = await response.json();
+      console.log("Bookmark saved:", result);
       onBookmark(item);
     } catch (error) {
       console.error("Error saving bookmark:", error);
