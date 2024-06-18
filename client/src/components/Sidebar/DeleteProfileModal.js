@@ -1,13 +1,40 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Modal.css";
+import config from "../../config";
 
 const DeleteProfileModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const navigate = useNavigate();
 
-  const handleDeleteProfile = () => {
-    // Logic for deleting profile
-    onClose();
+  const handleDeleteProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("No token found, authorization required");
+      }
+
+      const response = await fetch(`${config.backendUrl}/api/user`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete profile");
+      }
+
+      localStorage.clear(); // Clear all local storage data
+      navigate("/login"); // Redirect to the login page
+      onClose();
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+    }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">

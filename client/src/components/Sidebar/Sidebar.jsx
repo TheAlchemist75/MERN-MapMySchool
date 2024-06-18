@@ -221,6 +221,7 @@
 // ----------------------------------------------------------
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AddHomeModal from "./Addhomemodal";
 import UpdateProfileModal from "./UpdateProfileModal";
 import DeleteProfileModal from "./DeleteProfileModal";
@@ -259,6 +260,8 @@ function Sidebar() {
   const [isDataModalOpen, setIsDataModalOpen] = useState(false);
   const [isBookmarkModalOpen, setIsBookmarkModalOpen] = useState(false);
   const [bookmarkedItem, setBookmarkedItem] = useState(null);
+
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -307,6 +310,11 @@ function Sidebar() {
 
   const handleBookmark = (item) => {
     setBookmarkedItem(item);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear(); // Clear all local storage data
+    navigate("/login"); // Redirect to the login page
   };
 
   return (
@@ -447,11 +455,7 @@ function Sidebar() {
             )}
           </li>
           <li>
-            <a
-              href="#"
-              className="menu-item"
-              onClick={() => localStorage.clear()}
-            >
+            <a href="#" className="menu-item" onClick={handleLogout}>
               <LogoutIcon className="menu-icon" /> Logout
             </a>
           </li>

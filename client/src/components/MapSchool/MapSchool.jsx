@@ -200,7 +200,7 @@ const apiUrls = {
   kindertageseinrichtungen: `${config.backendUrl}/api/data/kindertageseinrichtungen`,
   schulsozialarbeit: `${config.backendUrl}/api/data/schulsozialarbeit`,
   schulen: `${config.backendUrl}/api/data/schulen`,
-  homes: `${config.backendUrl}/api/homes`, // Add your homes API endpoint
+  homes: `${config.backendUrl}/api/homes`,
 };
 
 const transformToGeoJSON = (data) => {
@@ -231,7 +231,7 @@ const transformHomesToGeoJSON = (homes) => {
   };
 };
 
-function MapSchool({ token }) {
+function MapSchool() {
   const mapRef = useRef(null);
   const [selectedData, setSelectedData] = useState("jugendberufshilfen");
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -250,7 +250,12 @@ function MapSchool({ token }) {
 
   const fetchHomesData = async () => {
     try {
-      const response = await axios.get(apiUrls.homes);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      };
+      const response = await axios.get(apiUrls.homes, config);
       const geoJsonData = transformHomesToGeoJSON(response.data);
       setHomesData(geoJsonData);
     } catch (error) {
@@ -260,7 +265,7 @@ function MapSchool({ token }) {
 
   useEffect(() => {
     fetchData(selectedData);
-    fetchHomesData(); // Fetch homes data on component mount
+    fetchHomesData();
   }, [selectedData]);
 
   const handleMapLoad = () => {
@@ -312,6 +317,7 @@ function MapSchool({ token }) {
     });
 
     if (homesData) {
+      console.log("Adding homes data:", homesData); // Debugging line
       map.addSource("homes", {
         type: "geojson",
         data: homesData,
