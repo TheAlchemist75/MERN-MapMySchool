@@ -32,26 +32,6 @@ const Login = ({ onLogin }) => {
     }
   };
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-
-  //   const response = await fetch(`${config.backendUrl}/api/auth/login`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ username, password }),
-  //   });
-
-  //   const data = await response.json();
-  //   if (response.ok) {
-  //     localStorage.setItem("token", data.token);
-  //     // Proceed with user login
-  //   } else {
-  //     console.error("Login failed:", data.message);
-  //   }
-  // };
-
   const goToRegister = () => {
     navigate("/register");
   };
@@ -59,7 +39,12 @@ const Login = ({ onLogin }) => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <div className="auth-image"></div>
+        <div class="auth-image">
+          <img
+            src="https://res.cloudinary.com/dcprg19es/image/upload/v1718826505/MapMySchool/fpf7s1hk0cppflur1fgv.jpg"
+            alt="Cloudinary-Map"
+          />
+        </div>
         <div className="auth-content">
           <h1>Login</h1>
           <form onSubmit={handleLogin}>

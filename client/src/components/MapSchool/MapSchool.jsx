@@ -17,34 +17,29 @@ const apiUrls = {
   homes: `${config.backendUrl}/api/homes`,
 };
 
-const transformToGeoJSON = (data) => {
-  return {
-    type: "FeatureCollection",
-    features: data.features.map((feature) => ({
-      type: "Feature",
-      geometry: feature.geometry,
-      properties: feature.properties,
-    })),
-  };
-};
+const transformToGeoJSON = (data) => ({
+  type: "FeatureCollection",
+  features: data.features.map((feature) => ({
+    type: "Feature",
+    geometry: feature.geometry,
+    properties: feature.properties,
+  })),
+});
 
-const transformHomesToGeoJSON = (homes) => {
-  console.log("Transforming homes data:", homes); // Log the homes data before transformation
-  return {
-    type: "FeatureCollection",
-    features: homes.map((home) => ({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: home.coordinates,
-      },
-      properties: {
-        name: home.name,
-        address: home.address,
-      },
-    })),
-  };
-};
+const transformHomesToGeoJSON = (homes) => ({
+  type: "FeatureCollection",
+  features: homes.map((home) => ({
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: home.coordinates,
+    },
+    properties: {
+      name: home.name,
+      address: home.address,
+    },
+  })),
+});
 
 function MapSchool({ token }) {
   const mapRef = useRef(null);
@@ -52,6 +47,7 @@ function MapSchool({ token }) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [data, setData] = useState(null);
   const [homesData, setHomesData] = useState(null);
+  const directionsRef = useRef(null);
 
   const fetchData = async (type) => {
     try {
@@ -71,15 +67,13 @@ function MapSchool({ token }) {
         },
       };
       const response = await axios.get(apiUrls.homes, config);
-      console.log("Fetched homes data:", response.data); // Log the fetched data
       const geoJsonData = transformHomesToGeoJSON(response.data);
-      console.log("Transformed homes data to GeoJSON:", geoJsonData); // Log the transformed data
       setHomesData(geoJsonData);
     } catch (error) {
       console.error(
         "Error fetching homes data:",
         error.response || error.message || error
-      ); // Improved error logging
+      );
     }
   };
 
@@ -92,21 +86,27 @@ function MapSchool({ token }) {
     setMapLoaded(true);
     const map = mapRef.current.getMap();
 
-    if (!map.isStyleLoaded()) {
-      map.on("style.load", () => {
-        addMapLayers(map);
-      });
-    } else {
-      addMapLayers(map);
-    }
-
     const directions = new Directions({
       accessToken: mapboxgl.accessToken,
       unit: "metric",
       profile: "mapbox/driving",
     });
 
+    directionsRef.current = directions;
     map.addControl(directions, "top-left");
+
+    map.on("click", (event) => {
+      if (directionsRef.current) {
+        const coords = event.lngLat;
+        if (!directionsRef.current.getOrigin().geometry) {
+          directionsRef.current.setOrigin([coords.lng, coords.lat]);
+        } else {
+          directionsRef.current.setDestination([coords.lng, coords.lat]);
+        }
+      }
+    });
+
+    addMapLayers(map);
   };
 
   const addMapLayers = (map) => {
@@ -137,7 +137,6 @@ function MapSchool({ token }) {
     });
 
     if (homesData) {
-      console.log("Adding homes source and layer"); // Log layer addition
       map.addSource("homes", {
         type: "geojson",
         data: homesData,

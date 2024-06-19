@@ -26,8 +26,8 @@ const DeleteProfileModal = ({ isOpen, onClose }) => {
         throw new Error("Failed to delete profile");
       }
 
-      localStorage.clear(); // Clear all local storage data
-      navigate("/login"); // Redirect to the login page
+      localStorage.clear();
+      navigate("/login");
       onClose();
     } catch (error) {
       console.error("Error deleting profile:", error);
@@ -40,12 +40,12 @@ const DeleteProfileModal = ({ isOpen, onClose }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Delete Profile</h2>
+          <h2>Delete profile</h2>
           <button className="close-button" onClick={onClose}>
             ×
           </button>
         </div>
-        <div className="modal-body">
+        <div className="modal-body" style={{ marginBottom: "15px" }}>
           <p>Are you sure you want to delete your profile?</p>
         </div>
         <div className="modal-footer">

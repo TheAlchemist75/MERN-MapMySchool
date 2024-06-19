@@ -27,16 +27,23 @@ const Register = () => {
       console.log(res.data);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      window.alert("Registration successful!");
       navigate("/login");
     } catch (err) {
       console.error(err.response.data);
+      window.alert(`Registration failed: ${err.response.data.msg}`);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <div className="auth-image"></div>
+        <div className="auth-image">
+          <img
+            src="https://res.cloudinary.com/dcprg19es/image/upload/v1718826505/MapMySchool/fpf7s1hk0cppflur1fgv.jpg"
+            alt="Map-Image"
+          />
+        </div>
         <div className="auth-content">
           <h1>Register</h1>
           <form onSubmit={(e) => onSubmit(e)}>

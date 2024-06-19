@@ -35,7 +35,7 @@ const AddHomeModal = ({ isOpen, onClose }) => {
     const homeName = document.querySelector(".add-home-modal-input").value;
 
     if (!geocoderResult) {
-      console.error("Address not selected");
+      alert("Please select an address.");
       return;
     }
 
@@ -47,7 +47,7 @@ const AddHomeModal = ({ isOpen, onClose }) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     };
 
@@ -57,9 +57,10 @@ const AddHomeModal = ({ isOpen, onClose }) => {
         homeData,
         config
       );
-      console.log("Home added:", response.data);
+      alert("Home added successfully!");
       onClose();
     } catch (error) {
+      alert("Failed to add home. Please try again.");
       if (error.response) {
         console.error("Error response data:", error.response.data);
         console.error("Error response status:", error.response.status);
@@ -82,7 +83,8 @@ const AddHomeModal = ({ isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="add-home-modal-header">
-          <h2>Add Home</h2>
+          <h2>Add home</h2>
+          <div className="underline"></div>
           <button className="add-home-close-button" onClick={onClose}>
             &times;
           </button>
@@ -90,7 +92,7 @@ const AddHomeModal = ({ isOpen, onClose }) => {
         <div className="add-home-modal-body">
           <input
             type="text"
-            placeholder="Home Name"
+            placeholder="Enter name of your home"
             className="add-home-modal-input"
           />
           <div

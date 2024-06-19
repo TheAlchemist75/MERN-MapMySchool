@@ -12,7 +12,7 @@ function BookmarkModal({ isOpen, onClose, bookmarkedItems }) {
         <div className="modal-header">
           <h2>Saved Bookmarks</h2>
           <button onClick={onClose} className="close-button">
-            X
+            &times;
           </button>
         </div>
         <div className="modal-body">
