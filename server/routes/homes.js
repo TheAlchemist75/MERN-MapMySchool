@@ -27,4 +27,15 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
+// GET /api/homes
+router.get("/", auth, async (req, res) => {
+  try {
+    const homes = await Home.find({ user: req.user.id }); // Ensure you are fetching homes for the authenticated user
+    res.status(200).json(homes);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

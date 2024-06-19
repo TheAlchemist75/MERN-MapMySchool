@@ -2,9 +2,38 @@
 // import BookmarkIcon from "@mui/icons-material/Bookmark";
 // import CloseIcon from "@mui/icons-material/Close";
 // import "./Modal.css";
+// import config from "../../config";
 
-// const DataModal = ({ isOpen, onClose, data }) => {
+// const DataModal = ({ isOpen, onClose, data, onBookmark }) => {
 //   if (!isOpen || !data) return null;
+
+//   const handleBookmarkClick = async (item) => {
+//     try {
+//       console.log(
+//         "Sending bookmark request to:",
+//         `${config.backendUrl}/api/bookmark`
+//       );
+//       console.log("Request payload:", JSON.stringify({ item }));
+
+//       const response = await fetch(`${config.backendUrl}/api/bookmark`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ item }),
+//       });
+
+//       if (!response.ok) {
+//         throw new Error("Failed to save the bookmark");
+//       }
+
+//       const result = await response.json();
+//       console.log("Bookmark saved:", result);
+//       onBookmark(item);
+//     } catch (error) {
+//       console.error("Error saving bookmark:", error);
+//     }
+//   };
 
 //   return (
 //     <div className="modal-overlay" onClick={onClose}>
@@ -20,7 +49,10 @@
 //             <div key={index} className="data-card">
 //               <div className="data-card-header">
 //                 <h3>{item.properties.TRAEGER}</h3>
-//                 <BookmarkIcon className="bookmark-icon" />
+//                 <BookmarkIcon
+//                   className="bookmark-icon"
+//                   onClick={() => handleBookmarkClick(item)}
+//                 />
 //               </div>
 //               <p>
 //                 <strong>Leistungen:</strong> {item.properties.LEISTUNGEN}
@@ -52,9 +84,10 @@
 
 // export default DataModal;
 
-// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------
 
-import React from "react";
+// client/src/components/Sidebar/DataModal.jsx
+
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CloseIcon from "@mui/icons-material/Close";
 import "./Modal.css";
@@ -65,21 +98,20 @@ const DataModal = ({ isOpen, onClose, data, onBookmark }) => {
 
   const handleBookmarkClick = async (item) => {
     try {
-      console.log(
-        "Sending bookmark request to:",
-        `${config.backendUrl}/api/bookmark`
-      );
-      console.log("Request payload:", JSON.stringify({ item }));
+      const token = localStorage.getItem("token");
 
-      const response = await fetch(`${config.backendUrl}/api/bookmark`, {
+      const response = await fetch(`${config.backendUrl}/api/bookmarks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ item }),
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
         throw new Error("Failed to save the bookmark");
       }
 

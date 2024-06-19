@@ -58,7 +58,7 @@ const AddHomeModal = ({ isOpen, onClose }) => {
         config
       );
       console.log("Home added:", response.data);
-      onClose(); // Close the modal
+      onClose();
     } catch (error) {
       if (error.response) {
         console.error("Error response data:", error.response.data);

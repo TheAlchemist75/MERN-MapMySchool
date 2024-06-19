@@ -17,27 +17,12 @@ const Login = ({ onLogin }) => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   const user = { email, password };
-
-  //   try {
-  //     const res = await axios.post(`${API_URL}/api/auth/login`, user);
-  //     const token = res.data.token;
-  //     localStorage.setItem("token", token);
-  //     onLogin(token);
-  //     navigate("/map-school");
-  //   } catch (err) {
-  //     console.error(err.response.data);
-  //   }
-  // };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { email, password };
 
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, user); // API_URL should be defined appropriately
+      const res = await axios.post(`${API_URL}/api/auth/login`, user);
       const token = res.data.token;
       localStorage.setItem("token", token);
       onLogin(token);
@@ -46,6 +31,26 @@ const Login = ({ onLogin }) => {
       console.error(err.response.data);
     }
   };
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   const response = await fetch(`${config.backendUrl}/api/auth/login`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ username, password }),
+  //   });
+
+  //   const data = await response.json();
+  //   if (response.ok) {
+  //     localStorage.setItem("token", data.token);
+  //     // Proceed with user login
+  //   } else {
+  //     console.error("Login failed:", data.message);
+  //   }
+  // };
 
   const goToRegister = () => {
     navigate("/register");

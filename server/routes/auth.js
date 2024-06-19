@@ -66,6 +66,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const User = require("../models/User");
 
 // Login a user
@@ -85,17 +86,16 @@ router.post("/login", async (req, res) => {
     const payload = {
       user: {
         id: user.id,
-        username: user.username,
       },
     };
 
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 360000 },
+      { expiresIn: "1h" },
       (err, token) => {
         if (err) throw err;
-        res.json({ token, user: payload.user });
+        res.json({ token });
       }
     );
   } catch (err) {

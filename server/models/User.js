@@ -16,6 +16,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Bookmark" }],
 });
 
 module.exports = mongoose.model("User", UserSchema);
