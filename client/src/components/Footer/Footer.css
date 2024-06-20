@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+.footerRoot {
+  height: 80px;
+  width: 100%;
+  background-color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: #ffffff;
+  flex-wrap: wrap;
+}
+
+.footerLogoImage {
+  width: 50px;
+  margin-right: 10px;
+}
+
+.footerLogoText {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+}
+
+.footerRight {
+  display: flex;
+  align-items: center;
+}
+
+.footerLink {
+  font-family: "Playfair Display", serif;
+  margin: 0 15px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .footerRoot {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+  }
+
+  .footerLeft,
+  .footerRight {
+    justify-content: center;
+    margin: 10px 0;
+  }
+
+  .footerLogoText {
+    font-size: 24px;
+  }
+
+  .footerLink {
+    margin: 5px 10px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerLogoText {
+    font-size: 20px;
+  }
+
+  .footerLink {
+    font-size: 12px;
+  }
+}

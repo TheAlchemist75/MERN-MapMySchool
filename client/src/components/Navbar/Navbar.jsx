@@ -19,8 +19,9 @@ function Navbar() {
         <div className="rightContainer">
           <div className="navbarLinks">
             <span className="navbarLink">Home</span>
-            <span className="navbarLink">Contact</span>
             <span className="navbarLink">About</span>
+            <span className="navbarLink">Contact</span>
+            <span className="navbarLink">Feedback</span>
           </div>
         </div>
       </nav>

@@ -6,12 +6,14 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+
 import Navbar from "./components/Navbar/Navbar";
 import MapSchool from "./components/MapSchool/MapSchool";
 import Sidebar from "./components/Sidebar/Sidebar";
 import LandingPage from "./components/Landing/Landing";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,6 +62,8 @@ function App() {
           />
         </Routes>
       </Router>
+
+      <Footer />
     </div>
   );
 }
