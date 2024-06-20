@@ -7,16 +7,19 @@ function Navbar() {
   return (
     <div>
       <nav className="navbarRoot">
-        <div className="leftContainer">
-          <div className="logo">
-            <img
-              src="/images/logo.png"
-              className="logoImage"
-              alt="MapMySchool Logo"
-            />
+        <Link to="/map-school">
+          <div className="leftContainer">
+            <div className="logo">
+              <img
+                src="/images/logo.png"
+                className="logoImage"
+                alt="MapMySchool Logo"
+              />
+            </div>
+
+            <span className="logoText">MapMySchool</span>
           </div>
-          <span className="logoText">MapMySchool</span>
-        </div>
+        </Link>
 
         <div className="rightContainer">
           <div className="navbarLinks">
@@ -25,9 +28,6 @@ function Navbar() {
             </Link>
             <Link to="/about" className="navbarLink">
               About
-            </Link>
-            <Link to="/contact" className="navbarLink">
-              Contact
             </Link>
             <Link to="/feedback" className="navbarLink">
               Feedback

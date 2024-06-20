@@ -3,13 +3,7 @@
 .about-container {
   display: flex;
   align-items: center;
-  background: linear-gradient(
-    135deg,
-    #fbfbff 0%,
-    #d5e6fd 50%,
-    #fbfbff 100%,
-    #7db9e8 100%
-  );
+  background: white;
   height: 100vh;
   box-sizing: border-box;
 }

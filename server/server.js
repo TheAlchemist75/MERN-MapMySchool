@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
@@ -10,6 +9,7 @@ const dataRoutes = require("./routes/dataRoutes");
 const homesRoute = require("./routes/homes");
 const userRoutes = require("./routes/user");
 const bookmarkRoutes = require("./routes/bookmarkRoutes");
+const feedbackRouter = require("./routes/feedback");
 
 const app = express();
 
@@ -27,6 +27,7 @@ app.use("/api/data", dataRoutes);
 app.use("/api/homes", homesRoute);
 app.use("/api/user", userRoutes);
 app.use("/api/bookmarks", bookmarkRoutes);
+app.use("/api/feedback", feedbackRouter);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

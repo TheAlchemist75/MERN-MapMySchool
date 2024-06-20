@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 function Footer() {
@@ -15,7 +16,9 @@ function Footer() {
       <div className="footerRight">
         <span className="footerLink">Privacy Policy</span>
         <span className="footerLink">Terms of Service</span>
-        <span className="footerLink">Contact Us</span>
+        <Link to="/feedback" className="footerLink">
+          Contact Us
+        </Link>
       </div>
     </div>
   );

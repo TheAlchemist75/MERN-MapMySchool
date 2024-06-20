@@ -3,7 +3,6 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const User = require("../models/User");
 
-// GET user data
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -14,7 +13,6 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// UPDATE user data
 router.put("/", auth, async (req, res) => {
   const { username, email } = req.body;
 
@@ -42,7 +40,6 @@ router.put("/", auth, async (req, res) => {
   }
 });
 
-// DELETE user
 router.delete("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
