@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import "./NavbarStyles.css";
 
 function Navbar() {
@@ -18,10 +20,18 @@ function Navbar() {
 
         <div className="rightContainer">
           <div className="navbarLinks">
-            <span className="navbarLink">Home</span>
-            <span className="navbarLink">About</span>
-            <span className="navbarLink">Contact</span>
-            <span className="navbarLink">Feedback</span>
+            <Link to="/map-school" className="navbarLink">
+              Home
+            </Link>
+            <Link to="/about" className="navbarLink">
+              About
+            </Link>
+            <Link to="/contact" className="navbarLink">
+              Contact
+            </Link>
+            <Link to="/feedback" className="navbarLink">
+              Feedback
+            </Link>
           </div>
         </div>
       </nav>
