@@ -2,6 +2,8 @@
 
 ![Logo](https://res.cloudinary.com/dcprg19es/image/upload/v1751037516/Github/sbicod8pwpjp7rxpmyzr.png)
 
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
 MapMySchool is a React-based web application that helps users discover and navigate to educational institutions in Chemnitz using Mapbox GL JS. The application provides various features, including interactive maps, navigation routes, and institution information.
 
 
